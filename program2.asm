@@ -12,48 +12,18 @@ halt
 . $_plus 2
 . $_gcd 4 
 
+% $_gcd gcd
+% $_plus +
+
 @kernel
     @kernel_init
 ; set datastack counter
         ldb 0
-        stb $cds
-;def "+" string
-        ldb 0
-        idx
-        lda 6
-        add
-        stx $_plus
-
-        inc x
-        lda 0
-        add
-        stx $_plus
-;def "gcd" string
-        ldb 0
-        idx
-        lda 36
-        add
-        stx $_gcd
-        inc x
-        lda 32
-        add
-        stx $_gcd
-        inc x
-        lda 33
-        add
-        stx $_gcd
-        
-        inc x
-        lda 0
-        add
-        stx $_gcd          
+        stb $cds         
     ret
 
     @read_input
-        in 1
-        ;ldb 1
-        ;test eq
-        ;jmpf :read_int 
+        in 1 
         test z
         ; what if the input is an digit
         jmpt :read_int
@@ -80,8 +50,6 @@ halt
         :next_char
             in 1
             in 1
-            ;ldb 0
-            ;test eq
             test z
             jmpt :done_read_char
             ldb 20
@@ -121,8 +89,6 @@ halt
             ;check for next
         :next_digit
             in 1
-            ;ldb 1
-            ;test eq
             test z
             jmpf :done_read_int
                 lma $t1
@@ -226,7 +192,7 @@ halt
         test eq
         skip
         jmp :_gcd
-        jmp :end_instuction
+    jmp :end_instuction
 
     :_plus
         call @dst_pop
@@ -234,12 +200,18 @@ halt
         call @dst_pop
         add
         call @dst_push
-        ;halt
     jmp :end_instuction
 
-    :_gcd    
+    :_gcd
+        call @dst_pop
+        call @swopab
+        call @dst_pop
+        call @gcd
+        call @dst_push  
+    jmp :end_instuction 
 
     :end_instuction
+
     ret
 
 

@@ -156,7 +156,7 @@ class controller:
                 self.halt = True
                 self.PC.do("write", self.PC.do("dec"))
             case _:
-                self.fatalerror("INTRUCTION ERROR, wrong  place to be")
+                self.fatalerror("INTRUCTION ERROR, wrong  place to be : " + self.IR[1])
                 
         #set controlbits
         if self.regR.do("read") == 0: 

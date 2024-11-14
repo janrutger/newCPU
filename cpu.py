@@ -18,13 +18,13 @@ regIO = register("regIO")
 plotter = buffer("plotter")
 kbd     = buffer("kbd")
 
-myASCI = maketable()
+myASCII = maketable()
 
 memsize  = 128 *3
 MEMORY   = memory(memsize)
 
 CONTROLLER = controller(pc, ix, sp, regA, regB, regR, regIO, MEMORY)
-IO_MANAGER = IOmanagement(myASCI, regIO, kbd, plotter)
+IO_MANAGER = IOmanagement(myASCII, regIO, kbd, plotter)
 
 loaderstart = 0
 progstart   = loaderstart +64
@@ -34,10 +34,13 @@ symbols     = {}
 files       = [('loader.asm', loaderstart), ('program2.asm', progstart)]
 
 for file in files:
-    bin, varaddress, symbols = compile(file[0], file[1], varaddress, symbols)
+    bin, varaddress, symbols = compile(file[0], file[1], varaddress, symbols, myASCII)
     for line in bin:
         print(line)
-        (MEMORY.do("write",line[0], (line[1], line[2]))) 
+        # if len(line) == 3:
+        #     (MEMORY.do("write",line[0], (line[1], line[2]))) 
+        # else:
+        MEMORY.do("write",line[0], line[1])
 
 
 halted = False
