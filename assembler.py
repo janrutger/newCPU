@@ -74,7 +74,7 @@ def compile(source, address, var, symbols, myASCII):
             binProgram.append(newLine)
             pc = pc +1
 
-        elif instruction[0] in ['stx', 'lxa', 'lxb', 'sto', 'sta', 'stb', 'lma', 'lmb']:
+        elif instruction[0] in ['maa', 'mab', 'stx', 'lxa', 'lxb', 'sto', 'sta', 'stb', 'lma', 'lmb']:
             if instruction[1][0] == "$":
                 newLine = (pc, (instruction[0], int(symbols[instruction[1]])))
             else:
@@ -95,7 +95,7 @@ def compile(source, address, var, symbols, myASCII):
             newLine = (pc, (instruction[0], (instruction[1])))
             binProgram.append(newLine)
             pc = pc +1
-        elif instruction[0] in ['halt', 'idx','push', 'pop', 'ret', 'add', 'sub', 'mul', 'div', 'skip']:
+        elif instruction[0] in ['halt', 'cmp', 'isz', 'idx','push', 'pop', 'ret', 'add', 'sub', 'mul', 'div', 'skip']:
             newLine = (pc, (instruction[0], None))
             binProgram.append(newLine)
             pc = pc +1

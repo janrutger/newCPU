@@ -137,41 +137,76 @@ halt
         lmb $t2
     ret
 
+    @cmp_string
+        ; expects adres pointers in regA and regB
+        ; returns 0 (true) when eq, 1 when not eq
+        cmp
+        jmpf :end_cmp_string
+            isz
+        jmpt :end_cmp_string
+            inc a
+            inc b 
+        jmp @cmp_string
+
+        :end_cmp_string
+        ret
+
+
     @cmp_string_input
         ; compare with "+"
+        ; ldb 0
+        ; idx
+        ; :loop_cmp_str_+
+        ;     lxa $str_in
+        ;     lxb $_plus
+        ;     test eq
+        ;     jmpf :cmp_next_gcd
+        ;     test z
+        ;     inc x
+        ;     jmpf :loop_cmp_str_+
+        ;     ; return 1 if str is "+"
+        ;     lda 1
+        ;     ldb 0
+        ;     add
+        ;     jmp :str_cmp_done
+        maa $str_in
+        mab $_plus
+
+        call @cmp_string
+        jmpf :cmp_next_gcd
+        lda 1
         ldb 0
-        idx
-        :loop_cmp_str_+
-            lxa $str_in
-            lxb $_plus
-            test eq
-            jmpf :cmp_next_gcd
-            test z
-            inc x
-            jmpf :loop_cmp_str_+
-            ; return 1 if str is "+"
-            lda 1
-            ldb 0
-            add
-            jmp :str_cmp_done
+        add
+        jmp :str_cmp_done
+
         
         ; compare with "gcd"
         :cmp_next_gcd
+        maa $str_in
+        mab $_gcd
+
+        call @cmp_string
+        jmpf :str_not_eq
+        lda 2
         ldb 0
-        idx
-        :loop_cmp_str_gcd
-            lxa $str_in
-            lxb $_gcd
-            test eq
-            jmpf :str_not_eq
-            test z
-            inc x
-            jmpf :loop_cmp_str_gcd
-            ; return 2 if str is "gcd"
-            lda 2
-            ldb 0
-            add
-            jmp :str_cmp_done
+        add
+        jmp :str_cmp_done
+        ;:cmp_next_gcd
+        ; ldb 0
+        ; idx
+        ; :loop_cmp_str_gcd
+        ;     lxa $str_in
+        ;     lxb $_gcd
+        ;     test eq
+        ;     jmpf :str_not_eq
+        ;     test z
+        ;     inc x
+        ;     jmpf :loop_cmp_str_gcd
+        ;     ; return 2 if str is "gcd"
+        ;     lda 2
+        ;     ldb 0
+        ;     add
+        ;     jmp :str_cmp_done
 
 
     

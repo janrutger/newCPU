@@ -15,8 +15,8 @@ ret             #Return from subroutine
 sto   <adres>   #stores result to memory
 sta   <adres>
 stb   <adres>
-lma   <adres>   #loads mem adres to regA
-lmb   <adres>   #loads mem adres to regB
+lma   <adres>   #loads from mem adres to regA
+lmb   <adres>   #loads from mem adres to regB
 
 idx                 #regB to IX
 stx <adres> + IX    #store result
@@ -30,9 +30,13 @@ jmp <adres>
 test (eq | gt | z)  #result = 0 whem true, else result != 0
 
 jmpt <adres>    #jump to adres when zero bit is true (when last result = 0)
-jmpf <adres>    #jump to adres when zero bit is false
+jmpf <adres>    #jump to adres when zero bit is false (when last result !=0)
 
-skpt            # pc = pc + 1 when zero bit is true (when last result = 0)
+skip            # skip (pc = pc + 1) when zero bit is false (when last result != 0)
+
+maa <adres>    # load regA with adres
+mab <adres>    # load regB with adres
+cmp            # comapre the valuea  at adres in RegA  and at adres in regB
 
 out <device number>     #result to buffer
 in  <device number>     #Input buffer to regA

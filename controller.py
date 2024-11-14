@@ -27,9 +27,9 @@ class controller:
         if pc and self.halt:
             self.PC.do("write", pc)
             self.halt = False
-        elif self.halt:
-            self.PC.do("read", 0)
-            self.halt = False
+        # elif self.halt:  #kan dit weg?
+        #     self.PC.do("read", 0)
+        #     self.halt = False
         
         if INint:
             self.regA.do("write", self.regIO.do("read"))
@@ -40,13 +40,19 @@ class controller:
         
         # fetch
         self.IR = self.memory.do("read", self.PC.do("read"))
-        self.PC.do("write", self.PC.do("inc"))
+        #self.PC.do("write", self.PC.do("inc"))
+        self.PC.do("inc")
         
         #decode & execute
         match self.IR[0]:
             case "lda":
                 self.regA.do("write", self.IR[1])
             case "ldb":
+                self.regB.do("write", self.IR[1])
+
+            case "maa":
+                self.regA.do("write", self.IR[1])
+            case "mab":
                 self.regB.do("write", self.IR[1])
 
             case "sto":
@@ -100,6 +106,7 @@ class controller:
 
             case "jmp":
                 self.PC.do("write", self.IR[1])
+
             case "test":
                 self.regR.do("write", 1)
                 if self.IR[1] == 'eq':
@@ -113,6 +120,15 @@ class controller:
                         self.regR.do("write", 0)
                 else:
                     self.fatalerror("TEST ERROR, wrong  place to be")
+
+            case "cmp":
+                self.regR.do("write", 1)
+                if self.memory.do("read", self.regA.do("read")) == self.memory.do("read", self.regB.do("read")):
+                    self.regR.do("write", 0)
+            case "isz":
+                self.regR.do("write", 1)
+                if self.memory.do("read", self.regA.do("read")) == 0:
+                    self.regR.do("write", 0)
 
             case "jmpt":
                 if self.zero == True:
