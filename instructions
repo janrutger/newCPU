@@ -1,5 +1,5 @@
-lda <getal>
-ldb <getal>
+lda <getal> | <adres>
+ldb <getal> | <adres>
 
 
 add     #result -> RegA
@@ -34,9 +34,9 @@ jmpf <adres>    #jump to adres when zero bit is false (when last result !=0)
 
 skip            # skip (pc = pc + 1) when zero bit is false (when last result != 0)
 
-maa <adres>    # load regA with adres
-mab <adres>    # load regB with adres
-cmp            # comapre the valuea  at adres in RegA  and at adres in regB
+
+ise            # comapre the valuea  at adres in RegA  and at adres in regB
+isz            # comapre the valuea  at adres in RegA  and 0
 
 out <device number>     #result to buffer
 in  <device number>     #Input buffer to regA

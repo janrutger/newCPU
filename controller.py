@@ -121,7 +121,7 @@ class controller:
                 else:
                     self.fatalerror("TEST ERROR, wrong  place to be")
 
-            case "cmp":
+            case "ise":
                 self.regR.do("write", 1)
                 if self.memory.do("read", self.regA.do("read")) == self.memory.do("read", self.regB.do("read")):
                     self.regR.do("write", 0)
