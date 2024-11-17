@@ -81,6 +81,7 @@ class controller:
                 self.IX.do("write", self.regB.do("read"))
             case "stx":
                 self.memory.do("write", self.IR[1] + self.IX.do("read"), self.regR.do("read"))
+               # self.regR.do("write", self.IX.do("read"))
             case "lxa":
                 self.regA.do("write", self.memory.do("read", self.IR[1] + self.IX.do("read")))
             case "lxb":

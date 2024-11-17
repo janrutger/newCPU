@@ -82,7 +82,7 @@ def compile(source, address, var, symbols, myASCII):
             binProgram.append(newLine)
             pc = pc +1
 
-        elif instruction[0] in ['call', 'jmp', 'jmpt', 'jmpf']:
+        elif instruction[0] in ['call', 'jmp', 'jmpx', 'jmpt', 'jmpf']:
             if instruction[1] in labels.keys():
                 newLine = (pc, (instruction[0], labels[instruction[1]]))
             elif instruction[1] in symbols.keys():
