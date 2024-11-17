@@ -26,6 +26,7 @@ def maketable():
     table[" "] = 20
     table["#"] = 21
     table["/"] = 22
+    table["%"] = 23
 
     table["a"] = 30
     table["b"] = 31

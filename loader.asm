@@ -48,11 +48,7 @@ ret
     sta $dividend
     ;stb $divisor
     div
-    ; push
-    ; pop
     mul
-    ; push
-    ; pop
     call @swopab
     lma $dividend
     sub

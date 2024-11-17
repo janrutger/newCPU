@@ -14,13 +14,15 @@ halt
 . $_stub 2
 . $_plus 2
 . $_gcd 4 
+. $_mod 2
 
 % $_stub #
 % $_gcd gcd
 % $_plus +
+% $_mod %
 
-. $str_lut 3
-. $adr_lut 3
+. $str_lut 4
+. $adr_lut 4
 . $lut_i 1
 . $lut_len 1
 
@@ -33,44 +35,24 @@ halt
         stb $zero 
         ; set Lookup Index to zero
         stb $lut_i  
-        ldb 3
+        ldb 4
         stb $lut_len
     ; setup lookup table
-    ; stub at 0
-        ; iix $lut_i
-        ; lda $_stub
-        ; call @cpar
-        ; stx $str_lut
-
-        ; lda @_stub
-        ; call @cpar
-        ; stx $adr_lut
+        ; stub at 0
         lda $_stub
         ldb @_stub
         call @lut_add
-    ; plus "+" at 1
-        ; iix $lut_i
-        ; lda $_plus
-        ; call @cpar
-        ; stx $str_lut
-
-        ; lda @_plus
-        ; call @cpar
-        ; stx $adr_lut
+        ; plus "+" at 1
         lda $_plus
         ldb @_plus
         call @lut_add
-    ; gcd at 2
-        ; iix $lut_i
-        ; lda $_gcd
-        ; call @cpar
-        ; stx $str_lut
-
-        ; lda @_gcd
-        ; call @cpar
-        ; stx $adr_lut
+        ; gcd at 2
         lda $_gcd
         ldb @_gcd
+        call @lut_add
+        ; modulo "%" at 3
+        lda $_mod
+        ldb @_mod
         call @lut_add
     ret
 
@@ -121,8 +103,6 @@ halt
             jmpt :read_seperator
 
             inc x
-            ; ldb 0
-            ; add
             call @cpar
             stx $str_in
             jmp :next_char
@@ -131,9 +111,7 @@ halt
             ; write null to str_in as end char
             inc x
             stx $str_in
-            ;call @cmp_string_input
             call @lookup_input_string
-            ;call @do_instuction
             call @lookup_intruction
             jmp @read_input
         
@@ -141,9 +119,7 @@ halt
             ; write null to str_in as end char
             inc x
             stx $str_in
-            ;call @cmp_string_input
             call @lookup_input_string
-            ;call @do_instuction
             call @lookup_intruction
             jmp :end_read_input
 
@@ -175,12 +151,10 @@ halt
 
         :done_read_int
             lma $t1
-            ;ldb 0
-            ;sub
             call @cpar
             call @dst_push
             in 1
-            ; check fo seperator " "
+            ; check for seperator " "
             ldb 20
             test eq
             jmpt @read_input
@@ -189,25 +163,11 @@ halt
     ret
 
     @dst_push
-        ; lmb $cds 
-        ; idx
-        ; stx $dst
-        ; inc b
-        ; stb $cds
         iix $cds
         stx $dst
-        ;iix $cds
     ret
 
     @dst_pop
-        ; stb $t2
-        ; lmb $cds
-        ; dec b
-        ; idx
-        ; lxa $dst
-        ; ;dec b
-        ; stb $cds
-        ; lmb $t2
         dix $cds
         lxa $dst
     ret
@@ -246,53 +206,6 @@ halt
         :lookup_not_found
             call @cpar
     ret
-    ; @cmp_string_input
-    ;     ; compare with "+"
-    ;     lda $str_in
-    ;     ldb $_plus
-
-    ;     call @cmp_string
-    ;     jmpf :cmp_next_gcd
-    ;     lda 1
-    ;     ;ldb 0
-    ;     ;add
-    ;     call @cpar
-    ;     jmp :str_cmp_done
-
-        
-    ;     ; compare with "gcd"
-    ;     :cmp_next_gcd
-    ;     lda $str_in
-    ;     ldb $_gcd
-
-    ;     call @cmp_string
-    ;     jmpf :str_not_eq
-    ;     lda 2
-    ;     ; ldb 0
-    ;     ; add
-    ;     call @cpar
-    ;     jmp :str_cmp_done
-
-    
-    ;     :str_not_eq
-    ;         lda 0
-    ;         ; ldb 0 
-    ;         ; add
-    ;         call @cpar
-    ; :str_cmp_done
-    ; ret
-
-    ; @do_instuction
-    ;     ldb 1
-    ;     test eq
-    ;     skip 
-    ;     jmp @_plus
-
-    ;     ldb 2
-    ;     test eq
-    ;     skip
-    ;     jmp @_gcd
-    ; jmp :end_instuction
 
     @lookup_intruction
         ; expects the index of the inctruction in regA
@@ -316,6 +229,14 @@ halt
             call @gcd
             call @dst_push  
         jmp :end_instuction 
+
+        @_mod
+            call @dst_pop
+            call @swopab
+            call @dst_pop
+            call @mod
+            call @dst_push  
+        jmp :end_instuction
 
 
         @_stub
