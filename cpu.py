@@ -37,9 +37,6 @@ for file in files:
     bin, varaddress, symbols = compile(file[0], file[1], varaddress, symbols, myASCII)
     for line in bin:
         print(line)
-        # if len(line) == 3:
-        #     (MEMORY.do("write",line[0], (line[1], line[2]))) 
-        # else:
         MEMORY.do("write",line[0], line[1])
 
 

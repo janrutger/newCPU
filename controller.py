@@ -27,9 +27,9 @@ class controller:
         if pc and self.halt:
             self.PC.do("write", pc)
             self.halt = False
-        # elif self.halt:  #kan dit weg?
-        #     self.PC.do("read", 0)
-        #     self.halt = False
+        elif self.halt: # start at 0 when pc=None
+            self.PC.do("read", 0)
+            self.halt = False
         
         if INint:
             self.regA.do("write", self.regIO.do("read"))
@@ -65,6 +65,17 @@ class controller:
                 self.regA.do("write", self.memory.do("read", self.IR[1]))
             case "lmb":
                 self.regB.do("write", self.memory.do("read", self.IR[1]))
+            
+            case "lix":
+                self.IX.do("write", self.memory.do("read", self.IR[1]))
+            case "iix":
+                self.IX.do("write", self.memory.do("read", self.IR[1]))
+                # self.IX.do("inc")
+                self.memory.do("write", self.IR[1], self.IX.do("read") +1)
+            case "dix":
+                self.IX.do("write", self.memory.do("read", self.IR[1]))
+                self.IX.do("dec")
+                self.memory.do("write", self.IR[1], self.IX.do("read"))
 
             case "idx":
                 self.IX.do("write", self.regB.do("read"))
@@ -106,6 +117,8 @@ class controller:
 
             case "jmp":
                 self.PC.do("write", self.IR[1])
+            case "jmpx":
+                self.PC.do("write", self.memory.do("read", self.IR[1] + self.IX.do("read")))
 
             case "test":
                 self.regR.do("write", 1)

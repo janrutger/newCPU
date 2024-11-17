@@ -74,8 +74,8 @@ def compile(source, address, var, symbols, myASCII):
             binProgram.append(newLine) 
             pc = pc +1
 
-        elif instruction[0] in ['lda', 'ldb', 'stx', 'lxa', 'lxb', 'sto', 'sta', 'stb', 'lma', 'lmb']:
-            if instruction[1][0] == "$":
+        elif instruction[0] in ['lix', 'iix', 'dix', 'lda', 'ldb', 'stx', 'lxa', 'lxb', 'sto', 'sta', 'stb', 'lma', 'lmb']:
+            if instruction[1][0] == "$" or instruction[1][0] == "@":
                 newLine = (pc, (instruction[0], int(symbols[instruction[1]])))
             else:
                 newLine = (pc, (instruction[0], int(instruction[1])))

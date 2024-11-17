@@ -43,8 +43,9 @@ halt
         ldb 0
         idx
         ; first char
-        ldb 0
-        add
+        call @cpar
+        ; ldb 0
+        ; add
         stx $str_in
 
         :next_char
@@ -57,8 +58,9 @@ halt
             jmpt :read_seperator
 
             inc x
-            ldb 0
-            add
+            ; ldb 0
+            ; add
+            call @cpar
             stx $str_in
             jmp :next_char
 
@@ -106,8 +108,9 @@ halt
 
         :done_read_int
             lma $t1
-            ldb 0
-            sub
+            ;ldb 0
+            ;sub
+            call @cpar
             call @dst_push
             in 1
             ; check fo seperator " "
@@ -119,22 +122,27 @@ halt
     ret
 
     @dst_push
-        lmb $cds 
-        idx
+        ; lmb $cds 
+        ; idx
+        ; stx $dst
+        ; inc b
+        ; stb $cds
+        iix $cds
         stx $dst
-        inc b
-        stb $cds
+        ;iix $cds
     ret
 
     @dst_pop
-        stb $t2
-        lmb $cds
-        dec b
-        idx
+        ; stb $t2
+        ; lmb $cds
+        ; dec b
+        ; idx
+        ; lxa $dst
+        ; ;dec b
+        ; stb $cds
+        ; lmb $t2
+        dix $cds
         lxa $dst
-        ;dec b
-        stb $cds
-        lmb $t2
     ret
 
     @cmp_string
@@ -160,8 +168,9 @@ halt
         call @cmp_string
         jmpf :cmp_next_gcd
         lda 1
-        ldb 0
-        add
+        ;ldb 0
+        ;add
+        call @cpar
         jmp :str_cmp_done
 
         
@@ -173,15 +182,17 @@ halt
         call @cmp_string
         jmpf :str_not_eq
         lda 2
-        ldb 0
-        add
+        ; ldb 0
+        ; add
+        call @cpar
         jmp :str_cmp_done
 
     
         :str_not_eq
             lda 0
-            ldb 0 
-            add
+            ; ldb 0 
+            ; add
+            call @cpar
     :str_cmp_done
     ret
 

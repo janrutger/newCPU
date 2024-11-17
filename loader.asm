@@ -17,6 +17,13 @@ ret
     lmb $a1
 ret
 
+@cpar
+    stb $a1
+    ldb 0
+    sub
+    lmb $a1 
+ret
+
 @rnd
     lda 75
     lmb $seed
