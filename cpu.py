@@ -20,7 +20,7 @@ kbd     = buffer("kbd")
 
 myASCII = maketable()
 
-memsize  = 128 *3
+memsize  = 128 * 3
 MEMORY   = memory(memsize)
 
 CONTROLLER = controller(pc, ix, sp, regA, regB, regR, regIO, MEMORY)
@@ -29,7 +29,7 @@ IO_MANAGER = IOmanagement(myASCII, regIO, kbd, plotter)
 loaderstart = 0
 progstart   = loaderstart +64
 
-varaddress  = memsize -64
+varaddress  = memsize -96
 symbols     = {}
 files       = [('loader.asm', loaderstart), ('program2.asm', progstart)]
 

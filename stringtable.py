@@ -23,19 +23,20 @@ def maketable():
     table["8"] = 18
     table["9"] = 19
 
-    table[" "] = 20
+    table["$"] = 20
     table["#"] = 21
     table["/"] = 22
     table["%"] = 23
 
-    table["a"] = 30
-    table["b"] = 31
-    table["c"] = 32
-    table["d"] = 33
-    table["e"] = 34
-    table["f"] = 35
-    table["g"] = 36
-    table["h"] = 37
+    table[" "] = 30
+    table["a"] = 31
+    table["b"] = 32
+    table["c"] = 33
+    table["d"] = 34
+    table["e"] = 35
+    table["f"] = 36
+    table["g"] = 37
+    table["h"] = 38
 
 
     return table

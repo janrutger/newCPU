@@ -1,28 +1,33 @@
 @program
     call @init
     call @kernel_init
+    :lus
     call @read_input
+    :jmp :lus
 halt
 
 . $t1 1
 . $t2 1
 . $zero 1
-. $dst 8
+. $dst 24
 . $cds 1
 . $str_in 8
+. $str_in_i 1
 
 . $_stub 2
 . $_plus 2
 . $_gcd 4 
 . $_mod 2
+. $_exit 5
 
 % $_stub #
 % $_gcd gcd
 % $_plus +
 % $_mod %
+% $_exit exit
 
-. $str_lut 4
-. $adr_lut 4
+. $str_lut 5
+. $adr_lut 5
 . $lut_i 1
 . $lut_len 1
 
@@ -33,9 +38,11 @@ halt
         stb $cds  
         ; set zero
         stb $zero 
-        ; set Lookup Index to zero
+        ; set Lookup Indexes to zero
         stb $lut_i  
-        ldb 4
+        stb $str_in_i
+        ; set size of lookup table (=number of(insctructions))
+        ldb 5
         stb $lut_len
     ; setup lookup table
         ; stub at 0
@@ -54,11 +61,15 @@ halt
         lda $_mod
         ldb @_mod
         call @lut_add
+        ; exit at 4
+        lda $_exit
+        ldb @_exit
+        call @lut_add
     ret
 
     @lut_add
         ; expects pointer to str in regA
-        ; and pointer to adr in reg b
+        ; and pointer to adr in regB
         iix $lut_i
         call @cpar
         stx $str_lut
@@ -81,7 +92,7 @@ halt
         jmpt :end_read_input
 
         ; check for sepreator " "
-        ldb 20
+        ldb 30
         test eq
         jmpt @read_input
 
@@ -89,8 +100,6 @@ halt
         idx
         ; first char
         call @cpar
-        ; ldb 0
-        ; add
         stx $str_in
 
         :next_char
@@ -98,7 +107,7 @@ halt
             in 1
             test z
             jmpt :done_read_char
-            ldb 20
+            ldb 30
             test eq
             jmpt :read_seperator
 
@@ -155,7 +164,7 @@ halt
             call @dst_push
             in 1
             ; check for seperator " "
-            ldb 20
+            ldb 30
             test eq
             jmpt @read_input
 
@@ -209,6 +218,7 @@ halt
 
     @lookup_intruction
         ; expects the index of the inctruction in regA
+        ; index = 0 points to a stub routine, for unkown instructions
         call @swopab
         idx
         jmpx $adr_lut
@@ -238,11 +248,42 @@ halt
             call @dst_push  
         jmp :end_instuction
 
+        @_exit
+            halt
+        jmp :end_instuction
+
 
         @_stub
+            call @dst_push_str
         jmp :end_instuction
 
     :end_instuction
+    ret
+
+    @dst_push_str
+        ; expect $str_in string en put on the stack
+        ldb 0
+        stb $str_in_i
+        lix $str_in_i
+
+        :loop_findlast_0char
+            lxa $str_in
+            test z
+            jmpt :do_push_str
+            iix $str_in_i
+            jmp :loop_findlast_0char
+
+        :do_push_str
+            dix $str_in_i
+            lxa $str_in
+            call @cpar
+            call @dst_push
+            lma $str_in_i
+            test z
+            jmpt :done_push_str
+            jmp :do_push_str
+            
+        :done_push_str
     ret
 
    
