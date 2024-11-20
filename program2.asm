@@ -19,15 +19,17 @@ halt
 . $_gcd 4 
 . $_mod 2
 . $_exit 5
+. $_prt_num 2
 
 % $_stub #
 % $_gcd gcd
 % $_plus +
 % $_mod %
 % $_exit exit
+% $_prt_num .
 
-. $str_lut 5
-. $adr_lut 5
+. $str_lut 6
+. $adr_lut 6
 . $lut_i 1
 . $lut_len 1
 
@@ -42,12 +44,12 @@ halt
         stb $lut_i  
         stb $str_in_i
         ; set size of lookup table (=number of(insctructions))
-        ldb 5
+        ldb 6
         stb $lut_len
     ; setup lookup table
         ; stub at 0
         lda $_stub
-        ldb @_stub
+        ldb @_sto_str_dst
         call @lut_add
         ; plus "+" at 1
         lda $_plus
@@ -64,6 +66,11 @@ halt
         ; exit at 4
         lda $_exit
         ldb @_exit
+        call @lut_add
+
+        ; exPrint number  at 5
+        lda $_prt_num
+        ldb @_prt_num
         call @lut_add
     ret
 
@@ -252,8 +259,16 @@ halt
             halt
         jmp :end_instuction
 
+        @_prt_num
+            lda 0
+            call @cpar
+            out 3
+            call @dst_pop
+            call @cpar
+            out 3
+        jmp :end_instuction
 
-        @_stub
+        @_sto_str_dst
             call @dst_push_str
         jmp :end_instuction
 
@@ -280,8 +295,7 @@ halt
             call @dst_push
             lma $str_in_i
             test z
-            jmpt :done_push_str
-            jmp :do_push_str
+            jmpf :do_push_str
             
         :done_push_str
     ret

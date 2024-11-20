@@ -4,7 +4,7 @@ class IOmanagement:
         self.plotbuff = plotbuff
         self.kbdbuff  = kbd
         self.myASCCI  = myASCCI
-        #self.kbdbuff.do("write", 128)
+        self.terminalmode = None
 
     def do(self, IOaddress):
         if IOaddress == False:      # No device selected
@@ -22,6 +22,12 @@ class IOmanagement:
         elif IOaddress == 2:        # Plotter device = 2
             self.plotbuff.do("write", self.ioregister.do("read"))
             print("Devicebuffer        :",IOaddress, self.plotbuff.do("size"), self.plotbuff.dump())
+            return(False)
+        
+        elif IOaddress == 3:        # terminal device = 3
+            #self.plotbuff.do("write", self.ioregister.do("read"))
+            print("terminal            :",IOaddress, self.ioregister.do("read"))
+            self.terminal(self.ioregister.do("read"))
             return(False)
         else:                       #Wrong device 
             exit("ERROR: invalid IO device")
@@ -42,7 +48,19 @@ class IOmanagement:
                 self.kbdbuff.do("write", self.myASCCI["#"]) 
 
         self.kbdbuff.do("write", 1)
-        self.kbdbuff.do("write", self.myASCCI["null"])        
+        self.kbdbuff.do("write", self.myASCCI["null"])  
+
+    def terminal(self, inputvalue):
+        if self.terminalmode == None:
+            self.terminalmode = inputvalue
+        else:
+            if self.terminalmode == 0:
+                print(inputvalue)
+            elif self.terminalmode == 1:
+                pass
+            else:
+                exit("ERROR: invalid Terminal mode")
+            self.terminalmode = None
         
 
         return()
