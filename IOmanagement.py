@@ -16,7 +16,7 @@ class IOmanagement:
                 self.keyboard()
 
             self.ioregister.do("write", self.kbdbuff.do("read"))
-            print("Devicebuffer        :",IOaddress, self.kbdbuff.dump())
+            #print("Devicebuffer        :",IOaddress, self.kbdbuff.dump())
             return(True)
         
         elif IOaddress == 2:        # Plotter device = 2
@@ -26,7 +26,7 @@ class IOmanagement:
         
         elif IOaddress == 3:        # terminal device = 3
             #self.plotbuff.do("write", self.ioregister.do("read"))
-            print("terminal            :",IOaddress, self.ioregister.do("read"))
+            #print("terminal            :",IOaddress, self.ioregister.do("read"))
             self.terminal(self.ioregister.do("read"))
             return(False)
         else:                       #Wrong device 
@@ -55,9 +55,17 @@ class IOmanagement:
             self.terminalmode = inputvalue
         else:
             if self.terminalmode == 0:
-                print(inputvalue)
+                print(inputvalue, end=" ")
             elif self.terminalmode == 1:
-                pass
+                for lookup, index in self.myASCCI.items():
+                    if index == inputvalue:
+                        if lookup == "null":
+                            print(" " + lookup + " ", end="") #blank/space
+                        elif lookup == "nl":
+                            print(" ")
+                        else:
+                           print(lookup, end="") 
+
             else:
                 exit("ERROR: invalid Terminal mode")
             self.terminalmode = None

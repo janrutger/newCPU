@@ -39,4 +39,6 @@ def maketable():
     table["h"] = 38
 
 
+    table["nl"] = 99    # newline
+
     return table

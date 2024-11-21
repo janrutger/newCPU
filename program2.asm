@@ -3,7 +3,7 @@
     call @kernel_init
     :lus
     call @read_input
-    :jmp :lus
+    jmp :lus
 halt
 
 . $t1 1
@@ -20,6 +20,7 @@ halt
 . $_mod 2
 . $_exit 5
 . $_prt_num 2
+. $_prt_char 3
 
 % $_stub #
 % $_gcd gcd
@@ -27,9 +28,10 @@ halt
 % $_mod %
 % $_exit exit
 % $_prt_num .
+% $_prt_char .c 
 
-. $str_lut 6
-. $adr_lut 6
+. $str_lut 7
+. $adr_lut 7
 . $lut_i 1
 . $lut_len 1
 
@@ -44,7 +46,7 @@ halt
         stb $lut_i  
         stb $str_in_i
         ; set size of lookup table (=number of(insctructions))
-        ldb 6
+        ldb 7
         stb $lut_len
     ; setup lookup table
         ; stub at 0
@@ -71,6 +73,11 @@ halt
         ; exPrint number  at 5
         lda $_prt_num
         ldb @_prt_num
+        call @lut_add
+
+        ; Print number  at 6
+        lda $_prt_char
+        ldb @_prt_char
         call @lut_add
     ret
 
@@ -137,6 +144,7 @@ halt
             stx $str_in
             call @lookup_input_string
             call @lookup_intruction
+            call @prt_newline
             jmp :end_read_input
 
 
@@ -268,11 +276,29 @@ halt
             out 3
         jmp :end_instuction
 
+        @_prt_char
+            lda 1
+            call @cpar
+            out 3
+            call @dst_pop
+            call @cpar
+            out 3
+        jmp :end_instuction
+
         @_sto_str_dst
             call @dst_push_str
         jmp :end_instuction
 
     :end_instuction
+    ret
+
+    @prt_newline
+        lda 1
+        call @cpar
+        out 3
+        lda 99
+        call @cpar
+        out 3
     ret
 
     @dst_push_str
