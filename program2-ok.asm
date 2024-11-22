@@ -34,8 +34,8 @@ halt
 % $_prt_str .s
 % $_prt_quote .'
 
-. $str_lut 9
-. $adr_lut 9
+. $str_lut 8
+. $adr_lut 8
 . $lut_i 1
 . $lut_len 1
 

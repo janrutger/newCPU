@@ -32,7 +32,7 @@ halt
 % $_prt_num .
 % $_prt_char .c 
 % $_prt_str .s
-% $_prt_quote .'
+% $_prt_quote .' 
 
 . $str_lut 9
 . $adr_lut 9
@@ -50,7 +50,7 @@ halt
         stb $lut_i  
         stb $str_in_i
         ; set size of lookup table (=number of(insctructions))
-        ldb 8
+        ldb 9
         stb $lut_len
     ; setup lookup table
         ; stub at 0
@@ -89,7 +89,10 @@ halt
         ldb @_prt_str
         call @lut_add
 
-        
+        ; Print quote  at 8
+        lda $_prt_quote
+        ldb @_prt_quote
+        call @lut_add
     ret
 
     @lut_add
@@ -311,6 +314,28 @@ halt
                 call @cpar
                 out 3
         jmp :end_instuction
+
+        @_prt_quote
+            ldb 24
+            in 1
+            in 1
+            test eq
+            jmpt :prt_quote_done
+            call @swopab
+            lda 1
+            call @cpar
+            out 3
+            call @swopab
+            call @cpar
+            out 3
+            jmp @_prt_quote
+            
+            :prt_quote_done
+                ;lda 30
+                ;call @cpar
+                ;out 3
+        jmp :end_instuction
+
 
         @_sto_str_dst
             call @dst_push_str
