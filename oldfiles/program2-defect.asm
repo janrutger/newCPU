@@ -320,7 +320,7 @@ halt
             in 1
             in 1
             test eq
-            jmpt :prt_quote_done
+            jmpt :end_instuction
             call @swopab
             lda 1
             call @cpar
@@ -330,7 +330,7 @@ halt
             out 3
             jmp @_prt_quote
             
-            :prt_quote_done
+            ;:prt_quote_done
                 ;lda 30
                 ;call @cpar
                 ;out 3
