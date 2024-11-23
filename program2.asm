@@ -158,7 +158,7 @@ halt
             stx $str_in
             call @lookup_input_string
             call @lookup_intruction
-            call @prt_newline
+            ;call @prt_newline 
             jmp :end_read_input
 
 
@@ -198,6 +198,7 @@ halt
             jmpt @read_input
 
     :end_read_input
+        call @prt_newline
     ret
 
     @dst_push
@@ -329,12 +330,6 @@ halt
             call @cpar
             out 3
             jmp @_prt_quote
-            
-            ;:prt_quote_done
-                ;lda 30
-                ;call @cpar
-                ;out 3
-
         jmp :end_instuction
 
         @_sto_str_dst

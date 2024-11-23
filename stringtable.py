@@ -29,6 +29,7 @@ def maketable():
     table["%"] = 23
     table["'"] = 24
     table['"'] = 25
+    table[':'] = 26
 
     table[" "] = 30
     table["a"] = 31
@@ -39,6 +40,24 @@ def maketable():
     table["f"] = 36
     table["g"] = 37
     table["h"] = 38
+    table["i"] = 39
+    table["j"] = 40
+    table["k"] = 41
+    table["l"] = 42
+    table["m"] = 43
+    table["n"] = 44
+    table["o"] = 45
+    table["p"] = 46
+    table["q"] = 47
+    table["r"] = 48
+    table["s"] = 49
+    table["t"] = 50
+    table["u"] = 51
+    table["v"] = 52
+    table["w"] = 53
+    table["x"] = 54
+    table["y"] = 55
+    table["z"] = 56
 
 
     table["nl"] = 99    # newline

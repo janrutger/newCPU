@@ -36,7 +36,7 @@ files       = [('loader.asm', loaderstart), ('program2.asm', progstart)]
 for file in files:
     bin, varaddress, symbols = compile(file[0], file[1], varaddress, symbols, myASCII)
     for line in bin:
-        print(line)
+        # print(line)
         MEMORY.do("write",line[0], line[1])
 
 
