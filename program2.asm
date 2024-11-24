@@ -9,10 +9,17 @@ halt
 . $t1 1
 . $t2 1
 . $zero 1
+;datastack and pointer
 . $dst 24
 . $cds 1
+; input string and pointer
 . $str_in 8
 . $str_in_i 1
+; variable area and pointer
+. $_vars_ 24
+. $_vars_i_ 1
+. $_vars_index 1
+
 
 . $_stub 2
 . $_plus 2
@@ -44,8 +51,14 @@ halt
         ldb 0
         ; set datastack counter
         stb $cds  
+
+        ; set vars buffer and pointer to zero
+        stb $_vars_i_
+        stb $_vars_
+
         ; set zero
         stb $zero 
+
         ; set Lookup Indexes to zero
         stb $lut_i  
         stb $str_in_i
@@ -332,6 +345,10 @@ halt
             jmp @_prt_quote
         jmp :end_instuction
 
+        @_store_var_value
+           ;!
+        jmp :end_instuction
+
         @_sto_str_dst
             call @dst_push_str
         jmp :end_instuction
@@ -346,6 +363,66 @@ halt
         lda 99
         call @cpar
         out 3
+    ret
+
+    @sto_var_name
+        ldb 0
+        stb $str_in_i
+        stb $_vars_i_
+
+        lix $_vars_i_
+        lxa $_vars_
+
+        test z
+        jmpt :add_var_name
+            lmb $_vars_i_
+            stb $_vars_index
+
+            lix $_vars_i_
+            lxa $_vars_
+
+            lix $str_in_i
+            lxb $str_in
+            
+            :check_i
+            ; when zero, is match
+            test z 
+            jmpf :tst_eq
+                sta $_vars_index
+                call @cpar
+                call @dst_push
+                jmp :end_var_add
+            :tst_eq
+            test eq
+            jmpf :find_next_var
+            ; check next i
+                iix $_vars_i_
+                lxa $_vars_
+
+                iix $str_in_i
+                lxb $str_in
+            jmp :check_i
+
+            :find_next_var
+                :next_i
+                    iix $_vars_i_
+                    lxa $_vars_
+                    test z 
+                jmpf :next_i
+                ; skip value index
+                iix $_vars_i_
+                ; Next is an new var, or last var
+                
+
+
+
+
+            
+
+
+        :add_var_name
+
+    :end_var_add
     ret
 
     @dst_push_str

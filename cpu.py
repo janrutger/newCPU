@@ -29,7 +29,7 @@ IO_MANAGER = IOmanagement(myASCII, regIO, kbd, plotter)
 loaderstart = 0
 progstart   = loaderstart +64
 
-varaddress  = memsize -96
+varaddress  = memsize -128
 symbols     = {}
 files       = [('loader.asm', loaderstart), ('program2.asm', progstart)]
 
