@@ -385,22 +385,22 @@ halt
             lxb $str_in
             
             :check_i
-            ; when zero, is match
-            test z 
-            jmpf :tst_eq
-                sta $_vars_index
-                call @cpar
-                call @dst_push
-                jmp :end_var_add
-            :tst_eq
-            test eq
-            jmpf :find_next_var
-            ; check next i
-                iix $_vars_i_
-                lxa $_vars_
+                ; when zero, is match
+                test z 
+                jmpf :tst_eq
+                    lma $_vars_index
+                    call @cpar
+                    call @dst_push
+                    jmp :end_var_add
+                :tst_eq
+                test eq
+                jmpf :find_next_var
+                ; check next i
+                    iix $_vars_i_
+                    lxa $_vars_
 
-                iix $str_in_i
-                lxb $str_in
+                    iix $str_in_i
+                    lxb $str_in
             jmp :check_i
 
             :find_next_var
@@ -409,15 +409,18 @@ halt
                     lxa $_vars_
                     test z 
                 jmpf :next_i
+
                 ; skip value index
                 iix $_vars_i_
+
                 ; Next is an new var, or last var
-                
-
-
-
-
-            
+                iix $_vars_i_
+                test z 
+                jmpt :add_var_name
+                    ldb 0
+                    stb $str_in_i
+                jmp :next_i
+ 
 
 
         :add_var_name
