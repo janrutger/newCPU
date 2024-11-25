@@ -378,13 +378,11 @@ halt
             lmb $_vars_i_
             stb $_vars_index
 
-            lix $_vars_i_
-            lxa $_vars_
-
             lix $str_in_i
             lxb $str_in
             
             :check_i
+            ; comparee regA (var) and regB (input)
                 test eq
                 jmpf :find_next_var
                 test z  
