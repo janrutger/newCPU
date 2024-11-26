@@ -426,9 +426,9 @@ halt
 
             ldb 0
             stb $str_in_i
-            lix $str_in_i
-
+            
             :loop_add_var_name
+                lix $str_in_i
                 lxa $str_in
                 call @cpar
 
