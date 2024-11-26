@@ -405,10 +405,14 @@ halt
                 iix $_vars_i_
 
                 ; Next is the next var, or a new var
-                iix $_vars_i_
+                lix $_vars_i_
                 lxa $_vars_
                 test z 
                 jmpt :add_var_name
+                    ; set the index to the next var on the list
+                    lma $_vars_i_
+                    sta $_vars_index
+
                     ldb 0
                     stb $str_in_i
                     lix $str_in_i
@@ -416,6 +420,26 @@ halt
             jmp :next_i
  
         :add_var_name
+            ; set de var index
+            lma $_vars_i_
+            sta $_vars_index
+
+            ldb 0
+            stb $str_in_i
+            lix $str_in_i
+
+            :loop_add_var_name
+                lxa $str_in
+                call @cpar
+
+                lix $_vars_i_
+                stx $_vars_
+
+                test z 
+                jmpt :found_var
+                    iix $_vars_i_
+                    iix $str_in_i
+                jmp :loop_add_var_name
 
 
         :found_var
