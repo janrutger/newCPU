@@ -350,7 +350,8 @@ halt
         jmp :end_instuction
 
         @_sto_str_dst
-            call @dst_push_str
+            ;call @dst_push_str
+            call @sto_var_name
         jmp :end_instuction
 
     :end_instuction
@@ -436,11 +437,19 @@ halt
                 stx $_vars_
 
                 test z 
-                jmpt :found_var
+                jmpt :added_var
                     iix $_vars_i_
                     iix $str_in_i
                 jmp :loop_add_var_name
 
+        :added_var
+            iix $_vars_i_
+            iix $_vars_i_
+            lda 67
+            call @cpar
+            iix $_vars_i_
+            stx $_vars_
+            
 
         :found_var
             lma $_vars_index
