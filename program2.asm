@@ -316,10 +316,10 @@ halt
         @_prt_str
             call @dst_pop
             sta $_vars_i_
-            lix $_vars_i_
+            
             
             :prt_next_char
-
+            lix $_vars_i_
             lxa $_vars_
             test z
             jmpt :prt_space
@@ -346,6 +346,9 @@ halt
             ; out 3
             ; jmp @_prt_str
             :prt_space
+                lda 1
+                call @cpar
+                out 3
                 lda 30
                 call @cpar
                 out 3
