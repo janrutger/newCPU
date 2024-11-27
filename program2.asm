@@ -314,15 +314,37 @@ halt
         jmp :end_instuction
 
         @_prt_str
+            call @dst_pop
+            sta $_vars_i_
+            lix $_vars_i_
+            
+            :prt_next_char
+
+            lxa $_vars_
+            test z
+            jmpt :prt_space
+
             lda 1
             call @cpar
             out 3
-            call @dst_pop
-            test z
-            jmpt :prt_space
+            lxa $_vars_
+            ;test z 
+            ;jmpt :prt_space
             call @cpar
             out 3
-            jmp @_prt_str
+            iix $_vars_i_
+            jmp :prt_next_char
+
+
+            ; lda 1
+            ; call @cpar
+            ; out 3
+            ; call @dst_pop
+            ; test z
+            ; jmpt :prt_space
+            ; call @cpar
+            ; out 3
+            ; jmp @_prt_str
             :prt_space
                 lda 30
                 call @cpar
@@ -397,11 +419,14 @@ halt
 
             :find_next_var
                 :next_i
+                    test z
+                    jmpt :found_var_end 
                     iix $_vars_i_
                     lxa $_vars_
-                    test z 
+                    ;test z 
                 jmpf :next_i
 
+                :found_var_end
                 ; skip value index
                 iix $_vars_i_
 
@@ -445,7 +470,7 @@ halt
         :added_var
             iix $_vars_i_
             iix $_vars_i_
-            lda 67
+            lda 0
             call @cpar
             iix $_vars_i_
             stx $_vars_
