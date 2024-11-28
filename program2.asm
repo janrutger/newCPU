@@ -30,6 +30,7 @@ halt
 . $_prt_char 3
 . $_prt_str 3
 . $_prt_quote 3
+. $_sto_val 2
 
 % $_stub #
 % $_gcd gcd
@@ -40,9 +41,10 @@ halt
 % $_prt_char .c 
 % $_prt_str .s
 % $_prt_quote .'
+% $_sto_val !
 
-. $str_lut 9
-. $adr_lut 9
+. $str_lut 10
+. $adr_lut 10
 . $lut_i 1
 . $lut_len 1
 
@@ -63,12 +65,12 @@ halt
         stb $lut_i  
         stb $str_in_i
         ; set size of lookup table (=number of(insctructions))
-        ldb 9
+        ldb 10
         stb $lut_len
     ; setup lookup table
         ; stub at 0
         lda $_stub
-        ldb @_sto_str_dst
+        ldb @_sto_string
         call @lut_add
         ; plus "+" at 1
         lda $_plus
@@ -106,6 +108,11 @@ halt
         lda $_prt_quote
         ldb @_prt_quote
         call @lut_add   
+
+        ; store value  at 9
+        lda $_sto_val
+        ldb @_store_var_value
+        call @lut_add 
     ret
 
     @lut_add
@@ -317,7 +324,6 @@ halt
             call @dst_pop
             sta $_vars_i_
             
-            
             :prt_next_char
             lix $_vars_i_
             lxa $_vars_
@@ -328,23 +334,12 @@ halt
             call @cpar
             out 3
             lxa $_vars_
-            ;test z 
-            ;jmpt :prt_space
             call @cpar
             out 3
             iix $_vars_i_
             jmp :prt_next_char
 
 
-            ; lda 1
-            ; call @cpar
-            ; out 3
-            ; call @dst_pop
-            ; test z
-            ; jmpt :prt_space
-            ; call @cpar
-            ; out 3
-            ; jmp @_prt_str
             :prt_space
                 lda 1
                 call @cpar
@@ -371,11 +366,15 @@ halt
         jmp :end_instuction
 
         @_store_var_value
-           ;!
+           call @find_var_val_i
+           ;halt
+           call @dst_pop
+           call @cpar
+           lix $_vars_i_
+           stx $_vars_
         jmp :end_instuction
 
-        @_sto_str_dst
-            ;call @dst_push_str
+        @_sto_string
             call @sto_var_name
         jmp :end_instuction
 
@@ -486,6 +485,17 @@ halt
             jmp :end_var_add
 
     :end_var_add
+    ret
+
+    @find_var_val_i
+        call @dst_pop
+        sta $_vars_i_
+
+        :loop_var_val
+            iix $_vars_i_
+            lxa $_vars_
+            test z 
+        jmpf :loop_var_val
     ret
 
     @dst_push_str
