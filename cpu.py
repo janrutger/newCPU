@@ -20,7 +20,7 @@ kbd     = buffer("kbd")
 
 myASCII = maketable()
 
-memsize  = 128 * 4
+memsize  = 128 * 5
 MEMORY   = memory(memsize)
 
 CONTROLLER = controller(pc, ix, sp, regA, regB, regR, regIO, MEMORY)

@@ -31,6 +31,7 @@ halt
 . $_prt_str 3
 . $_prt_quote 3
 . $_sto_val 2
+. $_ld_val 2
 
 % $_stub #
 % $_gcd gcd
@@ -42,9 +43,10 @@ halt
 % $_prt_str .s
 % $_prt_quote .'
 % $_sto_val !
+% $_ld_val @
 
-. $str_lut 10
-. $adr_lut 10
+. $str_lut 11
+. $adr_lut 11
 . $lut_i 1
 . $lut_len 1
 
@@ -65,7 +67,7 @@ halt
         stb $lut_i  
         stb $str_in_i
         ; set size of lookup table (=number of(insctructions))
-        ldb 10
+        ldb 11
         stb $lut_len
     ; setup lookup table
         ; stub at 0
@@ -113,6 +115,11 @@ halt
         lda $_sto_val
         ldb @_store_var_value
         call @lut_add 
+
+        ; load value  at 10
+        lda $_ld_val
+        ldb @_load_var_value
+        call @lut_add
     ret
 
     @lut_add
@@ -367,11 +374,18 @@ halt
 
         @_store_var_value
            call @find_var_val_i
-           ;halt
            call @dst_pop
            call @cpar
            lix $_vars_i_
            stx $_vars_
+        jmp :end_instuction
+
+        @_load_var_value
+            call @find_var_val_i
+            lix $_vars_i_
+            lxa $_vars_
+            call @cpar
+            call @dst_push
         jmp :end_instuction
 
         @_sto_string
@@ -399,6 +413,7 @@ halt
         lxa $_vars_
 
         test z
+        ; list is empty, so add the var
         jmpt :add_var_name
             lmb $_vars_i_
             stb $_vars_index
@@ -438,14 +453,15 @@ halt
                 test z 
                 jmpt :add_var_name
                     ; set the index to the next var on the list
-                    lma $_vars_i_
-                    sta $_vars_index
+                    lmb $_vars_i_
+                    stb $_vars_index
 
                     ldb 0
                     stb $str_in_i
                     lix $str_in_i
                     lxb $str_in
-            jmp :next_i
+            ;jmp :next_i
+            jmp :check_i
  
         :add_var_name
             ; set de var index
