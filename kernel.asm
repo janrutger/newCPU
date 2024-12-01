@@ -64,16 +64,17 @@
         ; set zero
         stb $zero 
 
-        ; set seed for random generator
-        ldb 5896
-        stb $seed
-
         ; set Lookup Indexes to zero
         stb $lut_i  
         stb $str_in_i
+
         ; set size of lookup table (=number of(insctructions))
         ldb 11
         stb $lut_len
+
+        ; set seed for random generator
+        ldb 5896
+        stb $seed
     ; setup lookup table
         ; stub at 0
         lda $_stub
