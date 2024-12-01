@@ -1,10 +1,11 @@
-@program
-    call @init
-    call @kernel_init
-    :lus
-    call @read_input
-    jmp :lus
-halt
+@kernel
+
+. $a1 1
+. $a2 1
+. $dividend 1
+;. $divisor 1
+;. $quotient 1
+. $seed 1
 
 . $t1 1
 . $t2 1
@@ -50,7 +51,7 @@ halt
 . $lut_i 1
 . $lut_len 1
 
-@kernel
+
     @kernel_init
         ldb 0
         ; set datastack counter
@@ -62,6 +63,10 @@ halt
 
         ; set zero
         stb $zero 
+
+        ; set seed for random generator
+        ldb 5896
+        stb $seed
 
         ; set Lookup Indexes to zero
         stb $lut_i  
@@ -537,6 +542,76 @@ halt
             
         :done_push_str
     ret
+
+
+; Some routines
+    @swopab
+        sta $a1
+        stb $a2
+        lma $a2
+        lmb $a1
+    ret
+
+    @cpar
+        stb $a1
+        ldb 0
+        sub
+        lmb $a1 
+    ret
+
+    @rnd
+        lda 75
+        lmb $seed
+        mul
+        ; push
+        ; pop
+        ldb 74
+        add
+        ; push 
+        ; pop
+        ldb 65536
+        call @mod
+        sto $seed
+        ; push
+        ; pop
+        ldb 655
+        div
+        ;out 2
+    ret
+
+    @mod
+        sta $dividend
+        ;stb $divisor
+        div
+        mul
+        call @swopab
+        lma $dividend
+        sub
+    ret
+
+    @gcd
+        test z
+        jmpt :done_gcd
+        call @swopab
+        test z
+        jmpt :done_gcd
+    ;:loop_gcd
+        test gt
+        jmpt :sub_gcd
+        call @swopab
+    :sub_gcd
+        sub
+        ; push
+        ; pop
+        test eq
+        ;jmpf :loop_gcd
+        jmp @gcd
+        ldb 0
+    :done_gcd
+        add
+    ret
+
+
 
    
 

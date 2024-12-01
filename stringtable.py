@@ -30,6 +30,7 @@ def maketable():
     table["'"] = 24
     table['"'] = 25
     table[':'] = 26
+    table['@'] = 27
 
     table[" "] = 30
     table["a"] = 31
