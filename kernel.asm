@@ -447,7 +447,7 @@
                     iix $_vars_i_
                     lxa $_vars_
                     ;test z 
-                jmpf :next_i
+                jmp :next_i
 
                 :found_var_end
                 ; skip value index
