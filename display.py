@@ -28,12 +28,15 @@ class Display():
             self.canvas.create_rectangle(x1, y1, x2, y2, fill="black")
 
     def draw_screen(self, memory):
+        print("draw screen")
         mem_pointer = 0
         for y in range(self.height):
             for x in  range(self.width):
                 self.draw_pixel(x, y, memory[mem_pointer])
                 mem_pointer = mem_pointer + 1
-                self.display.update()
+            self.display.update()
+    
+
         
 
     def refresh(self):
@@ -44,19 +47,48 @@ class Display():
 
 if __name__ == "__main__":
     
-    memory = []
-    for y in range(32):
-        for x in range(64):
-            memory.append(random.randint(0, 1))
+    sprite1 = [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,]
+    sprite2 = [1,0,1,0,1,0,1,0,0,1,0,1,0,1,0,1,1,0,1,0,1,0,1,0,0,1,0,1,0,1,0,1,1,0,1,0,1,0,1,0,0,1,0,1,0,1,0,1,1,0,1,0,1,0,1,0,0,1,0,1,0,1,0,1]
+    sprite3 = [1] *64
+    
+    def fill_mem():
+        memory = []
+        for y in range(32):
+            for x in range(64):
+                memory.append(random.randint(0, 1))
+        return(memory)
+    
+    def clear_mem():
+        memory = [0] * (32*64)
+        return(memory)
+    
+    def draw_mem(x, y, sprite, memory):
+        print("Draw Sprite in memory")
+        for i in range(8):
+            mem_pointer = (y+i) * 64 + x
+            for n in range(8):
+                memory[mem_pointer+n] = sprite[n + (i*8)]
+        return(memory)
+
+
+
+
+
 
     display = Display(64, 32, 10)
-    display.draw_screen(memory)
+    mem = fill_mem()
+    display.draw_screen(mem)
+    mem = clear_mem()
+    display.draw_screen(mem)
+    mem = draw_mem(10,10,sprite1,mem)
+    display.draw_screen(mem)
+    mem = draw_mem(10,10,sprite2,mem)
+    display.draw_screen(mem)
+    mem = draw_mem(10,10,sprite3,mem)
+    display.draw_screen(mem)
 
-    # input = [(15,10), (40,15)]
-    # for pixel in input:
-    #     display.draw_pixel(pixel[0], pixel[1], 1)
-    #     display.refresh()
     
     while True:
         display.refresh()
+
 
