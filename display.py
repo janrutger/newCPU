@@ -29,12 +29,13 @@ class Display():
 
     def draw_screen(self, memory):
         print("draw screen")
+        self.canvas.delete("all")
         mem_pointer = 0
         for y in range(self.height):
             for x in  range(self.width):
                 self.draw_pixel(x, y, memory[mem_pointer])
                 mem_pointer = mem_pointer + 1
-                self.display.update()
+        self.display.update()
     
 
         
@@ -78,6 +79,13 @@ if __name__ == "__main__":
                1,0,0,1,0,0,0,0,
                1,0,0,1,0,0,0,0,
                1,1,1,0,0,0,0,0]
+        
+    #'W': [0x9, 0x9, 0xf, 0xf, 0x9],
+    spriteW = [1,0,0,1,0,0,0,0,
+               1,0,0,1,0,0,0,0,
+               1,1,1,1,0,0,0,0,
+               1,1,1,1,0,0,0,0,
+               1,0,0,1,0,0,0,0]
 
     def fill_mem():
         memory = []
@@ -118,10 +126,11 @@ if __name__ == "__main__":
     #display.draw_screen(mem)
     mem = draw_mem(10,10,spriteA,mem,5)
     display.draw_screen(mem)
-    mem = draw_mem(16,10,spriteB,mem,5)
+    mem = draw_mem(15,10,spriteB,mem,5)
     display.draw_screen(mem)
     mem = draw_mem(10,16,spriteC,mem,5)
     # display.draw_screen(mem)
+    mem = draw_mem(20,10,spriteW,mem,5)
     mem = draw_mem(16,16,spriteD,mem,5)
     display.draw_screen(mem)
     
