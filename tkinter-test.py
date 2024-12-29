@@ -1,27 +1,35 @@
 from tkinter import *
-import threading
+import time
 
-class App(threading.Thread):
+class Display():
+    def __init__(self, width, height, scale):
+        self.width  = width
+        self.height = height
+        self.scale  = scale
 
-    def __init__(self, tk_root):
-        self.root = tk_root
-        threading.Thread.__init__(self)
-        self.start()
+        self.display = Tk()
 
-    def run(self):
-        loop_active = True
-        while loop_active:
-            user_input = input("Give me your command! Just type \"exit\" to close: ")
-            if user_input == "exit":
-                loop_active = False
-                self.root.quit()
-                self.root.update()
-            else:
-                label = Label(self.root, text=user_input)
-                label.pack()
+        self.canvas = Canvas(self.display, width=self.width*self.scale, height=self.height*self.scale)
+        self.canvas.pack()
+        self.canvas.config(bg="black")
 
-ROOT = Tk()
-APP = App(ROOT)
-LABEL = Label(ROOT, text="Hello, world!")
-LABEL.pack()
-ROOT.mainloop()
+    def draw_pixel(self, x, y):
+        x1 =  x * self.scale
+        y1 =  y * self.scale 
+        x2 = x1 + self.scale
+        y2 = y1 + self.scale
+
+        self.canvas.create_rectangle(x1, y1, x2, y2, fill="white")
+
+    def refresh(self):
+        self.display.update()
+        self.display.after(10, self.refresh)  # Schedule the next update after 10ms
+
+if __name__ == "__main__":
+    display = Display(64, 32, 10)
+    input = [(15,10), (40,15)]
+    for pixel in input:
+        display.draw_pixel(pixel[0], pixel[1])
+    
+    display.refresh()  # Start the refresh loop
+    #display.display.mainloop()  # Start the Tkinter main loop

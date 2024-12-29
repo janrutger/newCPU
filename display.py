@@ -1,5 +1,5 @@
 from tkinter import *
-
+import random
 import time
 
 class Display():
@@ -16,13 +16,25 @@ class Display():
 
         
 
-    def draw_pixel(self, x, y):
+    def draw_pixel(self, x, y, s):
         x1 =  x * self.scale
         y1 =  y * self.scale 
         x2 = x1 + self.scale
         y2 = y1 + self.scale
 
-        self.canvas.create_rectangle(x1, y1, x2, y2, fill="white")
+        if s == 1:
+            self.canvas.create_rectangle(x1, y1, x2, y2, fill="white")
+        else:
+            self.canvas.create_rectangle(x1, y1, x2, y2, fill="black")
+
+    def draw_screen(self, memory):
+        mem_pointer = 0
+        for y in range(self.height):
+            for x in  range(self.width):
+                self.draw_pixel(x, y, memory[mem_pointer])
+                mem_pointer = mem_pointer + 1
+                self.display.update()
+        
 
     def refresh(self):
         self.display.update()
@@ -30,15 +42,20 @@ class Display():
 
 
 
-
-
-
 if __name__ == "__main__":
+    
+    memory = []
+    for y in range(32):
+        for x in range(64):
+            memory.append(random.randint(0, 1))
+
     display = Display(64, 32, 10)
-    input = [(15,10), (40,15)]
-    for pixel in input:
-        display.draw_pixel(pixel[0], pixel[1])
-        display.refresh()
+    display.draw_screen(memory)
+
+    # input = [(15,10), (40,15)]
+    # for pixel in input:
+    #     display.draw_pixel(pixel[0], pixel[1], 1)
+    #     display.refresh()
     
     while True:
         display.refresh()
