@@ -5,14 +5,14 @@ def compile(source, address, var, symbols, myASCII):
         ASMfile.append(line.strip())
     file.close()
 
-    newProgram = []
+    program = []
     for line in ASMfile:
         if line == "" or line[0] == "#" or line[0] == ";":
             pass
         else:
-            newProgram.append(line)
+            program.append(line)
 
-    print(newProgram)
+    print(program)
 
     labels   = {}
     #symbols = symbols
@@ -22,12 +22,12 @@ def compile(source, address, var, symbols, myASCII):
 
     binProgram = []
 
-    for line in newProgram:
+    for line in program:
         if line[0] == ":":
             if line not in labels.keys():
                 labels[line] = pc
             else:
-                exit("ERROR Label already used : " + line)
+                exit("ERROR Label already used: " + line)
         elif line[0] == "@":
             if line not in symbols.keys():
                 symbols[line] = pc
@@ -46,7 +46,7 @@ def compile(source, address, var, symbols, myASCII):
                 i = 0
                 for char in _line[2]:
                     if char in myASCII.keys():
-                        newline = symbols[_line[1]] + i, myASCII[char] 
+                        newline = symbols[_line[1]] + i, myASCII[char]
                     else:
                         newline = symbols[_line[1]] + i, myASCII["#"]
                     binProgram.append(newline)
@@ -61,8 +61,8 @@ def compile(source, address, var, symbols, myASCII):
 
     print(symbols)
 
-    pc =address
-    for line in newProgram:
+    pc = address
+    for line in program:
         instruction = line.split()
         #print(instruction)
 
@@ -71,7 +71,7 @@ def compile(source, address, var, symbols, myASCII):
 
         elif instruction[0] in [ 'out', 'in']:
             newLine = (pc, (instruction[0], int(instruction[1])))
-            binProgram.append(newLine) 
+            binProgram.append(newLine)
             pc = pc +1
 
         elif instruction[0] in ['lix', 'iix', 'dix', 'lda', 'ldb', 'stx', 'lxa', 'lxb', 'sto', 'sta', 'stb', 'lma', 'lmb']:
@@ -103,6 +103,4 @@ def compile(source, address, var, symbols, myASCII):
             exit("Assembler ERROR: Unkown instruction: " + instruction[0])
 
 
-    return(binProgram, vars + varcount, symbols)       
-
-
+    return(binProgram, vars + varcount, symbols)

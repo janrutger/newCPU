@@ -1,6 +1,6 @@
 
 def maketable():
-    table = {}
+    table = dict()
 
     table["null"] = 0
     table["."] = 1
@@ -17,7 +17,7 @@ def maketable():
     table["2"] = 12
     table["3"] = 13
     table["4"] = 14
-    table["5"] = 15  
+    table["5"] = 15
     table["6"] = 16
     table["7"] = 17
     table["8"] = 18

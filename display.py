@@ -1,6 +1,5 @@
-from tkinter import *
+from tkinter import Tk, Canvas
 import random
-import time
 
 class Display():
     def __init__(self, width, height, scale):
@@ -14,11 +13,9 @@ class Display():
         self.canvas.pack()
         self.canvas.config(bg="black")
 
-        
-
     def draw_pixel(self, x, y, s):
         x1 =  x * self.scale
-        y1 =  y * self.scale 
+        y1 =  y * self.scale
         x2 = x1 + self.scale
         y2 = y1 + self.scale
 
@@ -28,67 +25,55 @@ class Display():
             self.canvas.create_rectangle(x1, y1, x2, y2, fill="black")
 
     def draw_screen(self, memory):
-        print("draw screen")
         mem_pointer = 0
         for y in range(self.height):
             for x in  range(self.width):
                 self.draw_pixel(x, y, memory[mem_pointer])
                 mem_pointer = mem_pointer + 1
             self.display.update()
-    
-
-        
 
     def refresh(self):
         self.display.update()
-        
 
 
+class DisplayMemory():
+    def __init__(self):
+        self.memory = [0] * (32*64)
 
-if __name__ == "__main__":
-    
-    sprite1 = [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,]
-    sprite2 = [1,0,1,0,1,0,1,0,0,1,0,1,0,1,0,1,1,0,1,0,1,0,1,0,0,1,0,1,0,1,0,1,1,0,1,0,1,0,1,0,0,1,0,1,0,1,0,1,1,0,1,0,1,0,1,0,0,1,0,1,0,1,0,1]
-    sprite3 = [1] *64
-    
-    def fill_mem():
-        memory = []
+    def fill(self):
+        self.memory = []
         for y in range(32):
             for x in range(64):
-                memory.append(random.randint(0, 1))
-        return(memory)
-    
-    def clear_mem():
-        memory = [0] * (32*64)
-        return(memory)
-    
-    def draw_mem(x, y, sprite, memory):
-        print("Draw Sprite in memory")
+                self.memory.append(random.randint(0, 1))
+
+    def draw(self,x, y, sprite):
         for i in range(8):
             mem_pointer = (y+i) * 64 + x
             for n in range(8):
-                memory[mem_pointer+n] = sprite[n + (i*8)]
-        return(memory)
+                self.memory[mem_pointer+n] = sprite[n + (i*8)]
+
+    def get(self):
+        return self.memory
 
 
+if __name__ == "__main__":
 
-
+    sprite1 = [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,]
+    sprite2 = [1,0,1,0,1,0,1,0,0,1,0,1,0,1,0,1,1,0,1,0,1,0,1,0,0,1,0,1,0,1,0,1,1,0,1,0,1,0,1,0,0,1,0,1,0,1,0,1,1,0,1,0,1,0,1,0,0,1,0,1,0,1,0,1]
+    sprite3 = [1] *64
 
 
     display = Display(64, 32, 10)
-    mem = fill_mem()
-    display.draw_screen(mem)
-    mem = clear_mem()
-    display.draw_screen(mem)
-    mem = draw_mem(10,10,sprite1,mem)
-    display.draw_screen(mem)
-    mem = draw_mem(10,10,sprite2,mem)
-    display.draw_screen(mem)
-    mem = draw_mem(10,10,sprite3,mem)
-    display.draw_screen(mem)
+    mem = DisplayMemory()
+    display.draw_screen(mem.get())
+    mem = DisplayMemory()
+    display.draw_screen(mem.get())
+    mem.draw(10,10,sprite1)
+    display.draw_screen(mem.get())
+    mem.draw(10,10,sprite2)
+    display.draw_screen(mem.get())
+    mem.draw(10,10,sprite3)
+    display.draw_screen(mem.get())
 
-    
     while True:
         display.refresh()
-
-

@@ -1,5 +1,4 @@
-from tkinter import *
-import time
+from tkinter import Tk, Canvas
 
 class Display():
     def __init__(self, width, height, scale):
@@ -9,13 +8,13 @@ class Display():
 
         self.display = Tk()
 
-        self.canvas = Canvas(self.display, width=self.width*self.scale, height=self.height*self.scale)
+        self.canvas = Canvas(self.display, width=self.width * self.scale, height=self.height*self.scale)
         self.canvas.pack()
         self.canvas.config(bg="black")
 
     def draw_pixel(self, x, y):
         x1 =  x * self.scale
-        y1 =  y * self.scale 
+        y1 =  y * self.scale
         x2 = x1 + self.scale
         y2 = y1 + self.scale
 
@@ -30,6 +29,6 @@ if __name__ == "__main__":
     input = [(15,10), (40,15)]
     for pixel in input:
         display.draw_pixel(pixel[0], pixel[1])
-    
+
     display.refresh()  # Start the refresh loop
     #display.display.mainloop()  # Start the Tkinter main loop
