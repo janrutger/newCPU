@@ -132,7 +132,7 @@ if __name__ == "__main__":
     mem = draw_mem(10,16,spriteC,mem,5)
     # display.draw_screen(mem)
     mem = draw_mem(20,10,spriteW,mem,5)
-    mem = draw_mem(16,16,spriteD,mem,5)
+    mem = draw_mem(15,16,spriteD,mem,5)
     display.draw_screen(mem)
     
     while True:
